@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { renderPhrase } from "../../particales/renderPhrase";
 
 const HeaderSumUsers = ({ sum }) => {
@@ -13,6 +14,10 @@ const HeaderSumUsers = ({ sum }) => {
       )}
     </h2>
   );
+};
+
+HeaderSumUsers.propTypes = {
+  sum: PropTypes.number.isRequired
 };
 
 export default HeaderSumUsers;
