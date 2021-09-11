@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const RowUser = ({ user, handleFavorit, handleDelete }) => {
   return (
@@ -34,6 +35,12 @@ const RowUser = ({ user, handleFavorit, handleDelete }) => {
       </td>
     </tr>
   );
+};
+
+RowUser.propTypes = {
+  user: PropTypes.object.isRequired,
+  handleFavorit: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired
 };
 
 export default RowUser;
