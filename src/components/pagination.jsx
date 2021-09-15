@@ -6,7 +6,6 @@ const Pagination = ({ itemsCount, pageSize, onPageChange, curentPage }) => {
   const pageCount = Math.ceil(itemsCount / pageSize);
   if (pageCount === 1) return null;
   const pages = _.range(1, pageCount + 1);
-  console.log("curentPage", curentPage);
   return (
     <nav aria-label="Page navigation example">
       <ul className="pagination">

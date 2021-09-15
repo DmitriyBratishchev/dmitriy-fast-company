@@ -4,6 +4,7 @@ module.exports = {
     es2021: true
   },
   extends: ["plugin:react/recommended", "standard"],
+  parser: "babel-eslint",
   parserOptions: {
     ecmaFeatures: {
       jsx: true
@@ -13,14 +14,23 @@ module.exports = {
   },
   plugins: ["react"],
   rules: {
+    // "prettier/prettier": "error",
     indent: ["error", 2],
     semi: [2, "always"],
-    "space-before-function-paren": ["error", "never"],
+    "space-before-function-paren": [
+      "error",
+      { anonymous: "always", named: "never" }
+    ],
     quotes: ["error", "double", { allowTemplateLiterals: true }],
-    "multiline-ternary": ["error", "never"],
-    "array-bracket-spacing": ["error", "always"],
-    "computed-property-spacing": ["error", "always"],
-    "comma-dangle": ["error", "never"]
+    "computed-property-spacing": ["error", "never"],
+    "comma-dangle": ["error", "never"],
+    "multiline-ternary": 0,
+    "operator-linebreak": [
+      "error",
+      "after",
+      { overrides: { "?": "ignore", ":": "ignore" } }
+    ],
+    "object-curly-spacing": ["error", "always"]
     // "array-bracket-spacing": ["error", 1]
   }
 };
