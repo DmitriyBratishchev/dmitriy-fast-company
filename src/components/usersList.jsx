@@ -6,8 +6,9 @@ import GroupList from "./groupList";
 import API from "../api";
 import UserTable from "./userTable";
 import _ from "lodash";
+// import NavBar from "./navBar";
 
-const Users = () => {
+const UsersList = () => {
   const [curentPage, setCurentPage] = useState(1);
   const [professions, setProfessions] = useState(null);
   const [selectedProf, setSelectedProf] = useState();
@@ -75,6 +76,7 @@ const Users = () => {
 
     return (
       <div className="d-flex">
+        {/* <NavBar /> */}
         {professions && (
           <div className="d-flex flex-column flex-shrink-0 p-3">
             <GroupList
@@ -115,4 +117,4 @@ const Users = () => {
   };
 };
 
-export default Users;
+export default UsersList;

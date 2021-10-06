@@ -6,10 +6,11 @@ import PropTypes from "prop-types";
 import Favorit from "./favorit";
 import QualitiesList from "./qualitiesList";
 import Table from "./table";
+import { Link } from "react-router-dom";
 
 const UserTable = ({ users, onSort, selectedSort, renderFavorit, handleFavorit, handleDelete }) => {
   const columns = {
-    name: { iter: "name", name: "Имя" },
+    name: { iter: "name", name: "Имя", component: (user) => <Link to={`/users/${user._id}`}>{user.name}</Link> },
     profession: { iter: "profession.name", name: "Профессия" },
     qualities: { name: "Качества", component: (user) => <QualitiesList qualities={user.qualities} /> },
     complitedMeetings: { iter: "completedMeetings", name: "Встретился, раз" },
