@@ -1,9 +1,13 @@
 import React from "react";
-import Users from "./components/users";
+import MenuRouter from "./components/menuRouter";
+import NavBar from "./components/navBar";
 
 const App = () => {
   return (
-    <Users />
+    <div>
+      <NavBar />
+      <MenuRouter />
+    </div>
   );
 };
 
