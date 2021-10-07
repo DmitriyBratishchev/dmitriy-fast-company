@@ -8,3 +8,15 @@ export const renderPhrase = (length) => {
   }
   return n === 2 || n === 3 || n === 4 ? "человека тусанут" : "человек тусанут";
 };
+
+export const renderEnding = (number) => {
+  const n = number % 10;
+  const exception = [11, 12, 13, 14];
+  if (exception.includes(number % 100)) {
+    return "";
+  } else if (n === 2 || n === 3 || n === 4) {
+    return "а";
+  } else {
+    return "";
+  };
+};

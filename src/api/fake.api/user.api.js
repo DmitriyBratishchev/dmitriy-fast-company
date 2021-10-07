@@ -128,7 +128,7 @@ const users = [
     name: "Джоуи Триббиани",
     profession: professions.actor,
     qualities: [qualities.uncertain, qualities.strange],
-    completedMeetings: 434,
+    completedMeetings: 412,
     rate: 3.5,
     favorit: false
   },
