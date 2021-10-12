@@ -6,7 +6,7 @@ const HeaderSumUsers = ({ sum }) => {
   return (
     <h2>
       {sum ? (
-        <span className="badge bg-primary">
+        <span className="badge bg-primary mt-3">
           {sum} {renderPhrase(sum)} с тобой:
         </span>
       ) : (
