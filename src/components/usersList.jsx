@@ -6,12 +6,14 @@ import GroupList from "./groupList";
 import API from "../api";
 import UserTable from "./userTable";
 import _ from "lodash";
+import TextField from "./textField";
 // import NavBar from "./navBar";
 
 const UsersList = () => {
   const [curentPage, setCurentPage] = useState(1);
   const [professions, setProfessions] = useState(null);
   const [selectedProf, setSelectedProf] = useState();
+  const [search, setSaerch] = useState("");
   const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
   const [users, setUsers] = useState();
   const pageSize = 4;
@@ -30,6 +32,11 @@ const UsersList = () => {
         el._id === userId ? { ...el, favorit: !el.favorit } : el
       )
     );
+  };
+
+  const handleChange = (e) => {
+    setSaerch(e.target.value);
+    console.log("e", e);
   };
 
   useEffect(() => {
@@ -51,6 +58,7 @@ const UsersList = () => {
   };
 
   const hendelProfessionSelect = (item) => {
+    // setSaerch("");
     setSelectedProf(item);
   };
 
@@ -63,9 +71,12 @@ const UsersList = () => {
   };
 
   if (users) {
+    console.log("search", typeof search);
     const filteredUsers = selectedProf
       ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
-      : users;
+      : search !== ""
+        ? users.filter((user) => user.name.includes(search))
+        : users;
 
     const countUsers = filteredUsers.length;
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
@@ -91,6 +102,13 @@ const UsersList = () => {
         )}
         <div className="d-flex flex-column">
           <HeaderSumUsers sum={countUsers} />
+          <TextField
+            name="search"
+            value={!selectedProf ? search : ""}
+            placeholder="Поиск..."
+            onChange={handleChange}
+            onFocus={clearSelected}
+          />
           {countUsers !== 0 && (
             <UserTable
               users={usersCrop}
