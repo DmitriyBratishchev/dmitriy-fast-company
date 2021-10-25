@@ -7,9 +7,9 @@ import Users from "./laiout/users";
 const MenuRouter = () => {
   return (
     <Switch>
-      <Route path="/" exact component={Main} />
-      <Route path="/login" component={Login} />
       <Route path="/users/:id?" component={Users} />
+      <Route path="/login/:type?" component={Login} />
+      <Route path="/" exact component={Main} />
       <Redirect to="/" />
     </Switch>
   );

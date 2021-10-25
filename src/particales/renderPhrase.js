@@ -18,5 +18,5 @@ export const renderEnding = (number) => {
     return "а";
   } else {
     return "";
-  };
+  }
 };
