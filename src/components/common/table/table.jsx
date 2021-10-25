@@ -13,10 +13,7 @@ const Table = ({ onSort, selectedSort, columns, data, children }) => {
             selectedSort={selectedSort}
             columns={columns}
           />
-          <TableBody
-            data={data}
-            columns={columns}
-          />
+          <TableBody data={data} columns={columns} />
         </>
       )}
     </table>

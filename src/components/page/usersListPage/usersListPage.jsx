@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Pagination from "./pagination";
-import { paginate } from "../utils/paginate";
-import HeaderSumUsers from "./tableUsers/headerSumUsers";
-import GroupList from "./groupList";
-import API from "../api";
-import UserTable from "./userTable";
+import Pagination from "../../common/pagination";
+import { paginate } from "../../../utils/paginate";
+import HeaderSumUsers from "../../ui/headerSumUsers";
+import GroupList from "../../common/groupList";
+import API from "../../../api";
+import UserTable from "../../ui/userTable";
 import _ from "lodash";
-import TextField from "./textField";
+import TextField from "../../common/form/textField";
 // import NavBar from "./navBar";
 
-const UsersList = () => {
+const UsersListPage = () => {
   const [curentPage, setCurentPage] = useState(1);
   const [professions, setProfessions] = useState(null);
   const [selectedProf, setSelectedProf] = useState();
@@ -36,7 +36,6 @@ const UsersList = () => {
 
   const handleChange = (e) => {
     setSaerch(e.target.value);
-    console.log("e", e);
   };
 
   useEffect(() => {
@@ -51,7 +50,7 @@ const UsersList = () => {
     if (users && curentPage > Math.ceil(users.length / pageSize)) {
       setCurentPage(Math.ceil(users.length / pageSize));
     }
-  }, [users]);
+  }, [users, curentPage]);
 
   const renderFavorit = () => {
     return users.filter((el) => el.favorit).length;
@@ -71,11 +70,15 @@ const UsersList = () => {
   };
 
   if (users) {
-    console.log("search", typeof search);
     const filteredUsers = selectedProf
-      ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
+      ? users.filter(
+        (user) =>
+          JSON.stringify(user.profession) === JSON.stringify(selectedProf)
+      )
       : search !== ""
-        ? users.filter((user) => user.name.includes(search))
+        ? users.filter((user) =>
+          user.name.toLowerCase().includes(search.toLowerCase())
+        )
         : users;
 
     const countUsers = filteredUsers.length;
@@ -87,7 +90,6 @@ const UsersList = () => {
 
     return (
       <div className="d-flex">
-        {/* <NavBar /> */}
         {professions && (
           <div className="d-flex flex-column flex-shrink-0 p-3">
             <GroupList
@@ -132,7 +134,7 @@ const UsersList = () => {
     );
   } else {
     return <h1>Loading . . . </h1>;
-  };
+  }
 };
 
-export default UsersList;
+export default UsersListPage;
