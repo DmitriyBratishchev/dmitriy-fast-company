@@ -10,7 +10,7 @@ import { useHistory } from "react-router";
 
 const UserEditPage = ({ match }) => {
   const id = match.params.id;
-  const histori = useHistory();
+  const { goBack } = useHistory();
   const [user, setUser] = useState();
   const [data, setData] = useState();
   const [qualities, setQualities] = useState({});
@@ -25,18 +25,15 @@ const UserEditPage = ({ match }) => {
 
   useEffect(() => {
     if (user) {
-      setData(
-        {
-          ...user,
-          profession: user.profession._id,
-          qualities: user.qualities.map((el) => (
-            {
-              label: el.name,
-              value: el._id
-            }))
-        }
-      );
-    };
+      setData({
+        ...user,
+        profession: user.profession._id,
+        qualities: user.qualities.map((el) => ({
+          label: el.name,
+          value: el._id
+        }))
+      });
+    }
   }, [user]);
 
   useEffect(() => validate(), [data]);
@@ -70,22 +67,43 @@ const UserEditPage = ({ match }) => {
     }));
   };
 
+  const handleGoBack = () => {
+    goBack();
+  };
+
   const handleSubmit = (e) => {
     event.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    const userProfession = professions[Object.keys(professions).find((key) => professions[key]._id === data.profession)];
+    const userProfession =
+      professions[Object.keys(professions).find((key) => professions[key]._id === data.profession)];
     const userQualities = Object.keys(qualities)
-      .filter((key) => JSON.stringify(data.qualities).includes(qualities[key]._id))
+      .filter((key) => data.qualities.map(el => el.value).includes(qualities[key]._id))
       .map((key) => qualities[key]);
-    API.users.update(id, { ...data, profession: userProfession, qualities: userQualities })
-      .then(() => histori.goBack());
+    API.users
+      .update(id, {
+        ...data,
+        profession: userProfession,
+        qualities: userQualities
+      })
+      .then(() => goBack());
   };
   if (user && data) {
     return (
       <div className="container mt-5">
         <div className="row">
-          <div className="col-md-6 offset-md-3 shadow p-4">
+          <div className="col-md-2">
+            <button
+              type="button"
+              // disabled={!isValid}
+              className="btn btn-primary w-100 mx-auto m-4"
+              onClick={handleGoBack}
+            >
+              <i className="bi bi-caret-left"></i>
+              Назад
+            </button>
+          </div>
+          <div className="col-md-6 offset-md-1 shadow p-4">
             <h1>{user.name} (редактирование)</h1>
             <form onSubmit={handleSubmit}>
               <TextField
@@ -130,7 +148,10 @@ const UserEditPage = ({ match }) => {
                 name="qualities"
                 label="Качества"
               />
-              <button disabled={!isValid} className="btn btn-primary w-100 mx-auto">
+              <button
+                disabled={!isValid}
+                className="btn btn-primary w-100 mx-auto"
+              >
                 Обновить
               </button>
             </form>
@@ -138,7 +159,9 @@ const UserEditPage = ({ match }) => {
         </div>
       </div>
     );
-  } else { return <h3>Loading ...</h3>; };
+  } else {
+    return <h3>Loading ...</h3>;
+  }
 };
 
 UserEditPage.propTypes = {

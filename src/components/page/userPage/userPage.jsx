@@ -1,35 +1,40 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import API from "../../../api";
-import QualitiesList from "../../ui/qualites/qualitiesList";
 import { useHistory } from "react-router-dom";
-import { renderEnding } from "../../../particales/renderPhrase";
+import UserCard from "./userCard";
+import Comments from "./comments";
 
 const UserPage = ({ match }) => {
   const id = match.params.id;
-  const [user, setUser] = useState();
   const history = useHistory();
+  const [user, setUser] = useState();
   useEffect(() => {
     API.users.getById(id).then((res) => setUser(res));
   }, []);
 
-  const handelToUsers = () => {
+  const handelToUserEdit = () => {
     history.push(`/users/${id}/edit`);
   };
 
   if (user) {
     return (
-      <>
-        <h1>{user.name}</h1>
-        <h3>Профессия: {user.profession.name}</h3>
-        <QualitiesList qualities={user.qualities} />
-        <h2>
-          Встретился {user.completedMeetings} раз
-          {renderEnding(user.completedMeetings)}
-        </h2>
-        <h2>Рэйтинг: {user.rate}</h2>
-        <button onClick={() => handelToUsers()}>Изменить</button>
-      </>
+      <div className="container">
+        <div className="row gutters-sm">
+          <div className="col-md-4 mb-3">
+            <UserCard
+              name={user.name}
+              profession={user.profession.name}
+              qualities={user.qualities}
+              completedMeetings={user.completedMeetings}
+              onClickSettings={handelToUserEdit}
+            />
+          </div>
+          <div className="col-md-8">
+            <Comments pageId={user._id} />
+          </div>
+        </div>
+      </div >
     );
   } else {
     return <h3>loading...</h3>;
