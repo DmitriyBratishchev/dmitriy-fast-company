@@ -1,4 +1,4 @@
-const qualities = {
+export const qualities = {
   tedious: {
     _id: "67rdca3eeb7f6fgeed471198",
     name: "Нудила",
@@ -15,7 +15,7 @@ const qualities = {
     color: "success"
   },
   alcoholic: {
-    _id: "67rdca3eeb7f6fgeed471101",
+    _id: "67rdca3eeb7f6fgeed4711013",
     name: "Алкоголик",
     color: "danger"
   },
