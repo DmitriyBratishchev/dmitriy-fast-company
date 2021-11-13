@@ -104,7 +104,7 @@ const UserEditPage = ({ match }) => {
             </button>
           </div>
           <div className="col-md-6 offset-md-1 shadow p-4">
-            <h1>{user.name} (Рffffffедактирование)</h1>
+            <h1>{user.name} (Рfffgggfffедактирование)</h1>
             <form onSubmit={handleSubmit}>
               <TextField
                 label="Имя"
