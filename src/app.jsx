@@ -7,6 +7,7 @@ const App = () => {
     <div>
       <NavBar />
       <MenuRouter />
+      <h1>hi</h1>
     </div>
   );
 };
