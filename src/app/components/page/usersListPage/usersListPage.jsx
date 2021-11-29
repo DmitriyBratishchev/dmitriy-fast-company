@@ -7,6 +7,7 @@ import API from "../../../api";
 import UserTable from "../../ui/userTable";
 import _ from "lodash";
 import TextField from "../../common/form/textField";
+import { useUser } from "../../../hooks/useUsers";
 // import NavBar from "./navBar";
 
 const UsersListPage = () => {
@@ -15,23 +16,22 @@ const UsersListPage = () => {
   const [selectedProf, setSelectedProf] = useState();
   const [search, setSaerch] = useState("");
   const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
-  const [users, setUsers] = useState();
+  const { users } = useUser();
   const pageSize = 4;
 
-  useEffect(() => {
-    API.users.fetchAll().then((res) => setUsers(res));
-  }, []);
-
   const handleDelete = (userId) => {
-    setUsers((prev) => prev.filter((el) => el._id !== userId));
+    // setUsers((prev) => prev.filter((el) => el._id !== userId));
+    console.log("handleDelete", userId);
   };
 
   const handleFavorit = (userId) => {
-    setUsers((prev) =>
-      prev.map((el) =>
-        el._id === userId ? { ...el, favorit: !el.favorit } : el
-      )
-    );
+    const userFavoritArray = users.map((el) => el._id === userId ? { ...el, favorit: !el.favorit } : el);
+    // setUsers((prev) =>
+    //   prev.map((el) =>
+    //     el._id === userId ? { ...el, favorit: !el.favorit } : el
+    //   )
+    // );
+    console.log(userFavoritArray);
   };
 
   const handleChange = (e) => {
@@ -72,14 +72,14 @@ const UsersListPage = () => {
   if (users) {
     const filteredUsers = selectedProf
       ? users.filter(
-          (user) =>
-            JSON.stringify(user.profession) === JSON.stringify(selectedProf)
-        )
+        (user) =>
+          JSON.stringify(user.profession) === JSON.stringify(selectedProf)
+      )
       : search !== ""
-      ? users.filter((user) =>
+        ? users.filter((user) =>
           user.name.toLowerCase().includes(search.toLowerCase())
         )
-      : users;
+        : users;
 
     const countUsers = filteredUsers.length;
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
@@ -87,6 +87,8 @@ const UsersListPage = () => {
     const clearSelected = () => {
       setSelectedProf();
     };
+
+    // console.log("context", users);
 
     return (
       <div className="d-flex">
