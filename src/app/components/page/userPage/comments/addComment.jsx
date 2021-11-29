@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import SelectField from "../../../common/form/selectField";
 import AreaField from "../../../common/form/areaField";
-import { validator } from "./../../../../utils/validator";
+import { validator } from "../../../../utils/validator";
 
 const AddComment = ({ pageId, users, onSubmit }) => {
   const [comment, setComment] = useState({});

@@ -1,5 +1,5 @@
 import React from "react";
-import MenuRouter from "./menuRouter";
+import MenuRouter from "../menuRouter";
 import NavBar from "./components/ui/navBar";
 
 const App = () => {
