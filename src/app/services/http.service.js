@@ -1,28 +1,29 @@
 import axios from "axios";
-import { toast } from "react-toastify"
-import config from "../../config.json";
+import { toast } from "react-toastify";
+import config from "../config.json";
 
-//адрес по-умолчанию
-axios.defaults.baseURL = config.apiEndpoint
+//  адрес по-умолчанию
+axios.defaults.baseURL = config.apiEndpoint;
 
 axios.interceptors.response.use((res) => {
   // toast.info("Данные успешно изменены!")
-  return res
+  return res;
 }, function (error) {
   // console.log("interceptor");
-  const expectedErrors = error.response && error.response.status >= 400 && error.response.status < 500
+  const expectedErrors = error.response && error.response.status >= 400 && error.response.status < 500;
   if (!expectedErrors) {
-    toast.error(`Произошла ошибка.\nКоманда работает над исправлением.\nПопробуйте позже.`)
+    console.log(error);
+    toast.error(`Произошла ошибка.\nКоманда работает над исправлением.\nПопробуйте позже.`);
     // toast("Unexpected error");
   }
-  return Promise.reject(error)
-})
+  return Promise.reject(error);
+});
 
 const httpService = {
-  get:axios.get,
-  post:axios.post,
-  put:axios.put,
-  delete:axios.delete
-}
+  get: axios.get,
+  post: axios.post,
+  put: axios.put,
+  delete: axios.delete
+};
 
 export default httpService;

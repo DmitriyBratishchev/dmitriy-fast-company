@@ -7,6 +7,7 @@ import Favorit from "../common/favorit";
 import Qualities from "./qualites";
 import Table from "../common/table";
 import { Link } from "react-router-dom";
+import Profession from "./profession";
 
 const UserTable = ({
   users,
@@ -22,10 +23,13 @@ const UserTable = ({
       name: "Имя",
       component: (user) => <Link to={`/users/${user._id}`}>{user.name}</Link>
     },
-    profession: { iter: "profession.name", name: "Профессия" },
     qualities: {
       name: "Качества",
-      component: (user) => <Qualities qualities={user.qualities} />
+      component: (user) => <Qualities qualitiesId={user.qualities} />
+    },
+    profession: {
+      name: "Профессия",
+      component: (user) => <Profession id={user.profession} />
     },
     complitedMeetings: { iter: "completedMeetings", name: "Встретился, раз" },
     rate: { iter: "rate", name: "Оценка" },
