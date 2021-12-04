@@ -35,11 +35,12 @@ export const ProfessionProvider = ({ children }) => {
       setProfessions(content);
       setLoading(false);
     } catch (error) {
+      console.log(error);
       errorCatcher(error);
     }
   };
 
-  function errorCatcher(error) {
+  function errorCatcher() {
     const { message } = error.response.data;
     setError(message);
     setLoading(false);
