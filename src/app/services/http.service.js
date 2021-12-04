@@ -1,12 +1,35 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import config from "../config.json";
+import configFile from "../config.json";
+
+const http = axios.create({
+  baseURL: configFile.fireBase ? configFile.apiEndpointFireBase : configFile.apiEndpoint
+});
 
 //  адрес по-умолчанию
-axios.defaults.baseURL = config.apiEndpoint;
+// http.defaults.baseURL = configFile.fireBase ? configFile.apiEndpointFireBase : configFile.apiEndpoint;
 
-axios.interceptors.response.use((res) => {
+http.interceptors.request.use(
+  function (config) {
+    if (configFile.fireBase) {
+      const containSlash = /\/$/gi.test(config.url);
+      config.url = (containSlash ? config.url.slice(0, -1) : config.url) + ".json";
+    }
+    return config;
+  }, function (error) {
+    return Promise.reject(error);
+  }
+);
+
+function transformData(data) {
+  return data && !data._id ? Object.keys(data).map((key) => ({ ...data[key] })) : data;
+}
+
+http.interceptors.response.use((res) => {
   // toast.info("Данные успешно изменены!")
+  if (configFile.fireBase) {
+    res.data = { content: transformData(res.data) };
+  }
   return res;
 }, function (error) {
   // console.log("interceptor");
@@ -20,10 +43,10 @@ axios.interceptors.response.use((res) => {
 });
 
 const httpService = {
-  get: axios.get,
-  post: axios.post,
-  put: axios.put,
-  delete: axios.delete
+  get: http.get,
+  post: http.post,
+  put: http.put,
+  delete: http.delete
 };
 
 export default httpService;
