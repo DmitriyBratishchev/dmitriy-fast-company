@@ -1,40 +1,47 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import API from "../../../api";
+// import API from "../../../api";
 import { validator } from "../../../utils/validator";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import { useHistory } from "react-router";
+// import { toast } from "react-toastify";
+import { useQualities } from "../../../hooks/useQuality";
+import { useProfession } from "../../../hooks/useProfession";
+import { useAuth } from "../../../hooks/useAuth";
 
 const UserEditPage = ({ match }) => {
   const id = match.params.id;
+  console.log(id);
   const { goBack } = useHistory();
-  const [user, setUser] = useState();
+  const { currentUser: user, createUser } = useAuth();
+  const { isLoading: isLoadingQualities, qualities, getQuality } = useQualities();
+  const qualitiesList = qualities.map(q => ({ label: q.name, value: q._id }));
+  const { isLoading: isLoadingProffesion, professions } = useProfession();
+
   const [data, setData] = useState();
-  const [qualities, setQualities] = useState({});
-  const [professions, setProfessions] = useState();
   const [errors, setErrors] = useState({});
   const isValid = Object.keys(errors).length === 0;
-  useEffect(() => {
-    API.users.getById(id).then((res) => setUser(res));
-    API.professions.fetchAll().then((data) => setProfessions(data));
-    API.qualities.fetchAll().then((data) => setQualities(data));
-  }, []);
 
   useEffect(() => {
-    if (user) {
+    if (user && !isLoadingQualities && !isLoadingProffesion) {
+      // if (id !== user._id) {
+      //   toast.info("Редактировать можно только свой профиль!");
+      //   push("/users/" + user._id + "/edit");
+      // }
       setData({
         ...user,
-        profession: user.profession._id,
-        qualities: user.qualities.map((el) => ({
-          label: el.name,
-          value: el._id
-        }))
+        qualities: getQuality(user.qualities)
+          .map((el) => ({
+            label: el.name,
+            value: el._id
+          })
+          )
       });
     }
-  }, [user]);
+  }, [user, isLoadingQualities, isLoadingProffesion]);
 
   useEffect(() => validate(), [data]);
 
@@ -42,6 +49,10 @@ const UserEditPage = ({ match }) => {
     name: {
       isRequired: {
         message: "Поле \"Имя\" обязательно для заполнения"
+      },
+      min: {
+        rule: (data) => data.length < 2,
+        message: "Имя должно состоять минимум из 2 символов"
       }
     },
     email: {
@@ -51,6 +62,15 @@ const UserEditPage = ({ match }) => {
       isEmail: {
         rule: (data) => !/^\S+@\S+\.\S+$/g.test(data),
         message: "Неверный формат для Email."
+      }
+    },
+    profession: {
+      isRequired: {}
+    },
+    qualities: {
+      min: {
+        rule: (data) => data.length === 0,
+        message: "Укажите качества."
       }
     }
   };
@@ -71,24 +91,23 @@ const UserEditPage = ({ match }) => {
     goBack();
   };
 
-  const handleSubmit = (e) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    const userProfession =
-      professions[Object.keys(professions).find((key) => professions[key]._id === data.profession)];
-    const userQualities = Object.keys(qualities)
-      .filter((key) => data.qualities.map(el => el.value).includes(qualities[key]._id))
-      .map((key) => qualities[key]);
-    API.users
-      .update(id, {
-        ...data,
-        profession: userProfession,
-        qualities: userQualities
-      })
-      .then(() => goBack());
+    const newData = { ...data, qualities: data.qualities.map(q => q.value) };
+    console.log("newData", newData);
+    try {
+      const data = await createUser(newData);
+      console.log("newData", data);
+      goBack();
+    } catch (error) {
+      setErrors(error);
+    }
   };
-  if (user && data) {
+  console.log("user", user);
+  console.log("data", data);
+  if (user && data && qualities) {
     return (
       <div className="container mt-5">
         <div className="row">
@@ -143,7 +162,7 @@ const UserEditPage = ({ match }) => {
               />
               <MultiSelectField
                 onChange={handleChange}
-                options={qualities}
+                options={ qualitiesList }
                 value={data.qualities}
                 name="qualities"
                 label="Качества"

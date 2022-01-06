@@ -21,7 +21,13 @@ module.exports = {
       "error",
       { anonymous: "always", named: "never" }
     ],
-    quotes: ["error", "double", { allowTemplateLiterals: true }],
+    quotes: [
+      "error",
+      "double",
+      {
+        allowTemplateLiterals: true,
+        avoidEscape: true
+      }],
     "computed-property-spacing": ["error", "never"],
     "comma-dangle": ["error", "never"],
     "multiline-ternary": 0,

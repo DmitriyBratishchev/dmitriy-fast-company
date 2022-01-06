@@ -1,8 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-// import RowUser from "./tableUsers/rowUser";
-// import TableHeader from "./tableHeader";
-// import TableBody from "./tableBody";
 import Favorit from "../common/favorit";
 import Qualities from "./qualites";
 import Table from "../common/table";
@@ -14,8 +11,7 @@ const UserTable = ({
   onSort,
   selectedSort,
   renderFavorit,
-  handleFavorit,
-  handleDelete
+  handleFavorit
 }) => {
   const columns = {
     name: {
@@ -37,17 +33,7 @@ const UserTable = ({
       iter: "favorit",
       name: "В избранном",
       func: renderFavorit(),
-      component: (user) => <Favorit handleFavorit={handleFavorit} user={user} />
-    },
-    delete: {
-      component: (user) => (
-        <button
-          className="btn btn-danger"
-          onClick={() => handleDelete(user._id)}
-        >
-          delete
-        </button>
-      )
+      component: (user) => <Favorit handleFavorit={ handleFavorit } user={ user } />
     }
   };
   return (
@@ -65,8 +51,7 @@ UserTable.propTypes = {
   selectedSort: PropTypes.object.isRequired,
   onSort: PropTypes.func.isRequired,
   renderFavorit: PropTypes.func.isRequired,
-  handleFavorit: PropTypes.func.isRequired,
-  handleDelete: PropTypes.func.isRequired
+  handleFavorit: PropTypes.func.isRequired
 };
 
 export default UserTable;
