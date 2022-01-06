@@ -1,46 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import API from "../../../../api";
 import { AddComment, CommentsList } from ".";
+import { useComments } from "../../../../hooks/useComments";
 
-const Comments = ({ pageId }) => {
-  const [users, setUsers] = useState();
-  const [comments, useComments] = useState();
-  const getComments = () => {
-    API.comments.fetchCommentsForUser(pageId).then(res => useComments(res));
-  };
-  useEffect(() => {
-    getComments();
-  }, []);
+const Comments = () => {
+  const { createComment, comments, removeComment } = useComments();
 
   const handleDelete = (id) => {
-    API.comments.remove(id).then(() => getComments());
+    removeComment(id);
   };
-  useEffect(() => {
-    API.users.fetchAll().then(res => setUsers(res));
-  }, []);
   const handleSubmit = (comment) => {
-    API.comments.add(comment).then(() => getComments());
+    createComment(comment);
   };
-  if (users) {
-    return (
-      <>
-        <AddComment
-          pageId={pageId}
-          users={users}
-          onSubmit={handleSubmit}
-        />
-        <CommentsList
-          comments={comments}
-          onDelete={handleDelete}
-          users={users} />
-      </>
-    );
-  } else { return <h2>loading. . .</h2>; };
+
+  return (
+    <>
+      <AddComment
+        onSubmit={ handleSubmit }
+      />
+      <CommentsList
+        comments={ comments }
+        onDelete={ handleDelete }
+      />
+    </>
+  );
 };
 
 Comments.propTypes = {
-  pageId: PropTypes.string
+  match: PropTypes.object
 };
 
 export default Comments;

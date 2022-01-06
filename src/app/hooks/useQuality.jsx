@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import qualityService from "../services/quality.service";
-// import professionService from "../services/profession.service";
 
 const QualitiesContext = React.createContext();
 
@@ -26,8 +25,8 @@ export const QualitiesProvider = ({ children }) => {
     }
   }, [error]);
 
-  function getQualities(id) {
-    return qualities.filter(q => id.includes(q._id));
+  function getQuality(id) {
+    return qualities.filter(q => id.indexOf(q._id) !== -1);
   }
 
   async function getQualityList() {
@@ -41,14 +40,15 @@ export const QualitiesProvider = ({ children }) => {
   };
 
   function errorCatcher(error) {
+    console.log("error", error);
     const { message } = error.response.data;
     setError(message);
     setLoading(false);
   }
 
-  // console.log("QualitiesProvider работает", qualities, isLoading);
+  console.log("QualitiesProvider работает", qualities, isLoading);
   return (
-    <QualitiesContext.Provider value={{ isLoading, qualities, getQualities }}>
+    <QualitiesContext.Provider value={ { isLoading, qualities, getQuality } }>
       {children}
     </QualitiesContext.Provider>
   );

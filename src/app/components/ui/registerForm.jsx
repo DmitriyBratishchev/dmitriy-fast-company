@@ -15,6 +15,7 @@ const RegisterForm = () => {
   const history = useHistory();
   const [data, setData] = useState({
     email: "",
+    name: "",
     password: "",
     profession: "",
     sex: "male",
@@ -39,6 +40,15 @@ const RegisterForm = () => {
       isEmail: {
         rule: (data) => !/^\S+@\S+\.\S+$/g.test(data),
         message: "Неверный формат для Email."
+      }
+    },
+    name: {
+      isRequired: {
+        message: "Это поле обязательно для заполнения"
+      },
+      min: {
+        rule: (data) => data.length < 2,
+        message: "Имя должно состоять минимум из 2 символов"
       }
     },
     password: {
@@ -105,6 +115,14 @@ const RegisterForm = () => {
         onChange={handleChange}
         value={data.email}
         error={errors.email}
+      />
+      <TextField
+        label="Имя"
+        placeholder="Это обязательное для заполнения поле"
+        name="name"
+        onChange={ handleChange }
+        value={ data.name }
+        error={ errors.name }
       />
       <TextField
         label="password"

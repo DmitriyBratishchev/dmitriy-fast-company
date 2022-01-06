@@ -10,8 +10,8 @@ const UsersRouter = () => {
       <Switch>
         <Route path="/users/:id/edit" component={UserEditPage} />
         <Route path="/users/:id" exact component={UserPage} />
-        <Route path="/users/" component={UsersListPage} />
-        <Redirect to="/users/" />
+        <Route path="/users/" component={ UsersListPage } />
+        <Redirect to="/" />
       </Switch>
     </>
   );

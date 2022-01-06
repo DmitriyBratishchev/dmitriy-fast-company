@@ -3,9 +3,10 @@ import PropTypes from "prop-types";
 import { useQualities } from "../../../hooks/useQuality";
 
 const QualitiesList = ({ qualitiesId }) => {
-  const { isLoading, getQualities } = useQualities();
+  const { isLoading, getQuality } = useQualities();
   if (!isLoading) {
-    const qualities = getQualities(qualitiesId);
+    console.log("qualitiesId", qualitiesId);
+    const qualities = getQuality(qualitiesId);
     return (
       <>
         {qualities.map((qualite) => {

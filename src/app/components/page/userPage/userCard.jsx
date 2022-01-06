@@ -1,25 +1,37 @@
 import React from "react";
 import PropTypes from "prop-types";
-import QualitiesList, { RandomAvatar } from "../../ui/qualites";
+import QualitiesList from "../../ui/qualites";
 import { renderEnding } from "../../../particales/renderPhrase";
+import { useHistory } from "react-router-dom";
+import Profession from "../../ui/profession";
+import Avatar from "../../ui/avatar";
+import { useAuth } from "../../../hooks/useAuth";
 
-const UserCard = ({ name, profession, rate, qualities, completedMeetings, onClickSettings }) => {
+const UserCard = ({ user }) => {
+  const history = useHistory();
+  const { currentUser } = useAuth();
+
+  const handelToUserEdit = () => {
+    history.push(`/users/${user._id}/edit`);
+  };
+
+  // console.log("UsereCard user", user);
   return (
     <>
       <div className="card mb-3">
         <div className="card-body">
-          <button className="position-absolute top-0 end-0 btn btn-light btn-sm" onClick={onClickSettings}>
+          { user._id === currentUser._id && <button className="position-absolute top-0 end-0 btn btn-light btn-sm" onClick={ handelToUserEdit }>
             <i className="bi bi-gear"></i>
-          </button>
+          </button> }
           <div className="d-flex flex-column align-items-center text-center position-relative">
-            <RandomAvatar />
+            <Avatar imageLink={ user.image } />
             <div className="mt-3">
-              <h4>{name}</h4>
-              <p className="text-secondary mb-1">{profession}</p>
+              <h4>{ user.name }</h4>
+              <Profession id={ user.profession } />
               <div className="text-muted">
                 <i className="bi bi-caret-down-fill text-primary" role="button"></i>
                 <i className="bi bi-caret-up text-secondary" role="button"></i>
-                <span className="ms-2">{rate}</span>
+                <span className="ms-2">{ user.rate }</span>
               </div>
             </div>
           </div>
@@ -31,7 +43,7 @@ const UserCard = ({ name, profession, rate, qualities, completedMeetings, onClic
             <span>Качества</span>
           </h5>
           <p className="card-text">
-            <QualitiesList qualities={qualities} />
+            <QualitiesList qualitiesId={ user.qualities } />
           </p>
         </div>
       </div>
@@ -41,9 +53,9 @@ const UserCard = ({ name, profession, rate, qualities, completedMeetings, onClic
             <span>Встретился</span>
           </h5>
 
-          <h1 className="display-1">{completedMeetings}</h1>
+          <h1 className="display-1">{ user.completedMeetings }</h1>
           <h5 className="card-title">
-            <span>раз{renderEnding(completedMeetings)}</span>
+            <span>раз{ renderEnding(user.completedMeetings) }</span>
           </h5>
         </div>
       </div>
@@ -52,12 +64,7 @@ const UserCard = ({ name, profession, rate, qualities, completedMeetings, onClic
 };
 
 UserCard.propTypes = {
-  name: PropTypes.string,
-  profession: PropTypes.string,
-  qualities: PropTypes.array,
-  rate: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  completedMeetings: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  onClickSettings: PropTypes.func
+  user: PropTypes.object
 };
 
 export default UserCard;

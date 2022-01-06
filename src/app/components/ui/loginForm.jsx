@@ -7,7 +7,7 @@ import { useHistory } from "react-router";
 
 const LoginForm = () => {
   const history = useHistory();
-  const { signIn } = useAuth();
+  const { logIn } = useAuth();
   const [data, setData] = useState({ email: "", password: "", stayOn: true });
   const [errors, setErrors] = useState({});
   const isValid = Object.keys(errors).length === 0;
@@ -60,8 +60,8 @@ const LoginForm = () => {
     const isValid = validate();
     if (!isValid) return;
     try {
-      await signIn(data);
-      history.push("/");
+      await logIn(data);
+      history.push(history.location.state ? history.location.state.from.pathname : "/");
     } catch (error) {
       setErrors(error);
     }

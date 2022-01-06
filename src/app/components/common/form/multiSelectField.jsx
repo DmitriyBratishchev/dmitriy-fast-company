@@ -22,7 +22,7 @@ const MultiSelectField = ({ onChange, options, name, label, value }) => {
         isMulti
         closeMenuOnSelect={false}
         options={optionsArray}
-        value={value}
+        value={ value }
         className="basic-multi-select"
         classNamePrefix="select"
         onChange={handleChange}

@@ -1,21 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import API from "../../../api";
-import { useHistory } from "react-router-dom";
 import UserCard from "./userCard";
 import Comments from "./comments";
+import { useUser } from "../../../hooks/useUsers";
+import { CommentsProvider } from "../../../hooks/useComments";
 
 const UserPage = ({ match }) => {
   const id = match.params.id;
-  const history = useHistory();
-  const [user, setUser] = useState();
-  useEffect(() => {
-    API.users.getById(id).then((res) => setUser(res));
-  }, []);
-
-  const handelToUserEdit = () => {
-    history.push(`/users/${id}/edit`);
-  };
+  const { getUserById } = useUser();
+  const user = getUserById(id);
 
   if (user) {
     return (
@@ -23,15 +16,13 @@ const UserPage = ({ match }) => {
         <div className="row gutters-sm">
           <div className="col-md-4 mb-3">
             <UserCard
-              name={user.name}
-              profession={user.profession.name}
-              qualities={user.qualities}
-              completedMeetings={user.completedMeetings}
-              onClickSettings={handelToUserEdit}
+              user={ user }
             />
           </div>
           <div className="col-md-8">
-            <Comments pageId={user._id} />
+            <CommentsProvider >
+              <Comments />
+            </CommentsProvider>
           </div>
         </div>
       </div >
