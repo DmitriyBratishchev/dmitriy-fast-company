@@ -16,7 +16,7 @@ const UserEditPage = ({ match }) => {
   const id = match.params.id;
   console.log(id);
   const { goBack } = useHistory();
-  const { currentUser: user, createUser } = useAuth();
+  const { currentUser: user, updateUserData } = useAuth();
   const { isLoading: isLoadingQualities, qualities, getQuality } = useQualities();
   const qualitiesList = qualities.map(q => ({ label: q.name, value: q._id }));
   const { isLoading: isLoadingProffesion, professions } = useProfession();
@@ -96,17 +96,18 @@ const UserEditPage = ({ match }) => {
     const isValid = validate();
     if (!isValid) return;
     const newData = { ...data, qualities: data.qualities.map(q => q.value) };
-    console.log("newData", newData);
-    try {
-      const data = await createUser(newData);
-      console.log("newData", data);
-      goBack();
-    } catch (error) {
-      setErrors(error);
-    }
+    // console.log("newData", newData);
+    // try {
+    // const data =
+    await updateUserData(newData);
+    // console.log("newData await", data);
+    goBack();
+    // } catch (error) {
+    // setErrors(error);
+    // }
   };
-  console.log("user", user);
-  console.log("data", data);
+  // console.log("user", user);
+  // console.log("data", data);
   if (user && data && qualities) {
     return (
       <div className="container mt-5">

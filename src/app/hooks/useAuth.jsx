@@ -80,7 +80,7 @@ const AuthProvider = ({ children }) => {
   };
 
   function logOut() {
-    console.log("auth logout");
+    // console.log("auth logout");
     removeAuthData();
     setCurrentUser(null);
     history.push("/");
@@ -90,14 +90,14 @@ const AuthProvider = ({ children }) => {
     // const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_KEY}`;
     try {
       const { data } = await httpAuth.post("accounts:signInWithPassword", { email, password, returnSecureToken: true });
-      console.log(data);
+      // console.log(data);
       setTokens(data);
       await getUserData();
     } catch (error) {
       errorCatcher(error);
       const { code, message } = error.response.data.error;
-      console.log(process.env);
-      console.log(code, message);
+      // console.log(process.env);
+      // console.log(code, message);
       if (code === 400) {
         if (message === "EMAIL_NOT_FOUND") {
           const errorObject = { email: "Пользователь с таким email не найден." };
@@ -113,9 +113,18 @@ const AuthProvider = ({ children }) => {
 
   async function createUser(data) {
     try {
-      console.log("createUser data", data);
+      // console.log("createUser data", data);
       const { content } = await userService.create(data);
-      console.log("createUser", content);
+      // console.log("createUser", content);
+      setCurrentUser(content);
+    } catch (error) {
+      errorCatcher(error);
+    }
+  }
+
+  async function updateUserData(data) {
+    try {
+      const { content } = await userService.update(data);
       setCurrentUser(content);
     } catch (error) {
       errorCatcher(error);
@@ -128,7 +137,7 @@ const AuthProvider = ({ children }) => {
     setLoading(false);
   }
   return (
-    <AuthContext.Provider value={ { signUp, currentUser, logIn, logOut, createUser } }>
+    <AuthContext.Provider value={ { signUp, currentUser, logIn, logOut, updateUserData } }>
       { !isLoading ? children : "Loading ..." }
     </AuthContext.Provider>
   );
