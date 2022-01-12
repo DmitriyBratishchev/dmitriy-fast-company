@@ -39,7 +39,7 @@ export const CommentsProvider = ({ children }) => {
   }
 
   async function createComment(data) {
-    console.log("useComment", data);
+    // console.log("useComment", data);
     const comment = {
       ...data,
       _id: nanoid(),
@@ -47,10 +47,10 @@ export const CommentsProvider = ({ children }) => {
       userId: currentUser._id,
       created_at: Date.now()
     };
-    console.log("comment", comment);
+    // console.log("comment", comment);
     try {
       const { content } = await commentService.createComment(comment);
-      console.log("createComment content", content);
+      // console.log("createComment content", content);
       setComments((prev) => [...prev, content]);
     } catch (error) {
       errorCatcher(error);
@@ -60,7 +60,7 @@ export const CommentsProvider = ({ children }) => {
   async function getComments() {
     try {
       const { content } = await commentService.getComments(pageId);
-      console.log("getCommets content", content);
+      // console.log("getCommets content", content);
       setComments(content);
     } catch (error) {
       errorCatcher(error);
@@ -72,7 +72,7 @@ export const CommentsProvider = ({ children }) => {
   async function removeComment(id) {
     try {
       const { content } = await commentService.removeComment(id);
-      console.log("removeCommets content", content);
+      // console.log("removeCommets content", content);
       if (content === null) {
         setComments(prev => prev.filter(comment => comment._id !== id));
       }

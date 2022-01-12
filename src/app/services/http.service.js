@@ -57,7 +57,7 @@ http.interceptors.response.use((res) => {
   // console.log("interceptor");
   const expectedErrors = error.response && error.response.status >= 400 && error.response.status < 500;
   if (!expectedErrors) {
-    console.log(error);
+    // console.log(error);
     toast.error(`Произошла ошибка.\nКоманда работает над исправлением.\nПопробуйте позже.`);
     // toast("Unexpected error");
   }
@@ -68,7 +68,8 @@ const httpService = {
   get: http.get,
   post: http.post,
   put: http.put,
-  delete: http.delete
+  delete: http.delete,
+  patch: http.patch
 };
 
 export default httpService;

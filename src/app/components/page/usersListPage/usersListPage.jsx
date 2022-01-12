@@ -58,8 +58,8 @@ const UsersListPage = () => {
 
   if (users) {
     function filterUsers(data) {
-      console.log("selectedProf", selectedProf);
-      console.log("selectedProf data", data);
+      // console.log("selectedProf", selectedProf);
+      // console.log("selectedProf data", data);
       const filteredUsers = selectedProf
         ? data.filter(
           (user) =>

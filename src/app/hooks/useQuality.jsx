@@ -46,7 +46,7 @@ export const QualitiesProvider = ({ children }) => {
     setLoading(false);
   }
 
-  console.log("QualitiesProvider работает", qualities, isLoading);
+  // console.log("QualitiesProvider работает", qualities, isLoading);
   return (
     <QualitiesContext.Provider value={ { isLoading, qualities, getQuality } }>
       {children}
