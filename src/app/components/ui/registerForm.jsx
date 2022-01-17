@@ -6,10 +6,11 @@ import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxField from "../common/form/checkBoxField";
-import { useQualities } from "../../hooks/useQuality";
-import { useProfession } from "../../hooks/useProfession";
 import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getQualities } from "../../store/qualities";
+import { getProfessions } from "../../store/professons";
 
 const RegisterForm = () => {
   const history = useHistory();
@@ -24,9 +25,10 @@ const RegisterForm = () => {
   });
 
   const { signUp } = useAuth();
-  const { qualities } = useQualities();
+  const qualities = useSelector(getQualities());
   const qualitiesList = qualities.map(q => ({ label: q.name, value: q._id }));
-  const { professions } = useProfession();
+  const professions = useSelector(getProfessions());
+
   const [errors, setErrors] = useState({});
   const isValid = Object.keys(errors).length === 0;
 
@@ -97,7 +99,6 @@ const RegisterForm = () => {
     const isValid = validate();
     if (!isValid) return;
     const newData = { ...data, qualities: data.qualities.map(q => q.value) };
-    // console.log(newData);
     try {
       await signUp(newData);
       history.push("/");
@@ -107,14 +108,14 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={ handleSubmit }>
       <TextField
         label="Электронная почта"
         placeholder="Это обязательное для заполнения поле"
         name="email"
-        onChange={handleChange}
-        value={data.email}
-        error={errors.email}
+        onChange={ handleChange }
+        value={ data.email }
+        error={ errors.email }
       />
       <TextField
         label="Имя"
@@ -128,45 +129,45 @@ const RegisterForm = () => {
         label="password"
         name="password"
         type="password"
-        onChange={handleChange}
-        value={data.password}
-        error={errors.password}
+        onChange={ handleChange }
+        value={ data.password }
+        error={ errors.password }
       />
       <SelectField
         label="Выбери свою профессию"
         defaultOption="не выбранно ..."
         name="profession"
-        value={data.profession}
-        options={professions}
-        onChange={handleChange}
-        error={errors.profession}
+        value={ data.profession }
+        options={ professions }
+        onChange={ handleChange }
+        error={ errors.profession }
       />
       <RadioField
         label="Твой пол"
-        options={[
+        options={ [
           { name: "Мужской", value: "male" },
           { name: "Женский", value: "female" },
           { name: "Другой", value: "other" }
-        ]}
+        ] }
         name="sex"
-        onChange={handleChange}
-        value={data.sex}
+        onChange={ handleChange }
+        value={ data.sex }
       />
       <MultiSelectField
-        onChange={handleChange}
-        options={qualitiesList}
+        onChange={ handleChange }
+        options={ qualitiesList }
         name="qualities"
         label="Укажите свои качества"
       />
       <CheckBoxField
-        value={data.licence}
-        onChange={handleChange}
+        value={ data.licence }
+        onChange={ handleChange }
         name="licence"
-        error={errors.licence}
+        error={ errors.licence }
       >
         Подтвердите <a>лицензионное соглашение</a>
       </CheckBoxField>
-      <button disabled={!isValid} className="btn btn-primary w-100 mx-auto">
+      <button disabled={ !isValid } className="btn btn-primary w-100 mx-auto">
         Отправить
       </button>
     </form>

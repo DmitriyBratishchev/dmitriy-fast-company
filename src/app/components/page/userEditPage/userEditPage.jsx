@@ -8,40 +8,40 @@ import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import { useHistory } from "react-router";
 // import { toast } from "react-toastify";
-import { useQualities } from "../../../hooks/useQuality";
-import { useProfession } from "../../../hooks/useProfession";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getQualities, getQualitiesLoadingStatus } from "../../../store/qualities";
+import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professons";
 
 const UserEditPage = ({ match }) => {
   const id = match.params.id;
   console.log(id);
   const { goBack } = useHistory();
   const { currentUser: user, updateUserData } = useAuth();
-  const { isLoading: isLoadingQualities, qualities, getQuality } = useQualities();
+
+  const professions = useSelector(getProfessions());
+  const professionsLoading = useSelector(getProfessionsLoadingStatus());
+  const qualities = useSelector(getQualities());
+  const isLoadingQualities = useSelector(getQualitiesLoadingStatus());
+
   const qualitiesList = qualities.map(q => ({ label: q.name, value: q._id }));
-  const { isLoading: isLoadingProffesion, professions } = useProfession();
 
   const [data, setData] = useState();
   const [errors, setErrors] = useState({});
   const isValid = Object.keys(errors).length === 0;
 
   useEffect(() => {
-    if (user && !isLoadingQualities && !isLoadingProffesion) {
+    if (user && !isLoadingQualities && !professionsLoading) {
       // if (id !== user._id) {
       //   toast.info("Редактировать можно только свой профиль!");
       //   push("/users/" + user._id + "/edit");
       // }
       setData({
         ...user,
-        qualities: getQuality(user.qualities)
-          .map((el) => ({
-            label: el.name,
-            value: el._id
-          })
-          )
+        qualities: qualitiesList.filter(q => user.qualities.indexOf(q.value) !== -1)
       });
     }
-  }, [user, isLoadingQualities, isLoadingProffesion]);
+  }, [user, isLoadingQualities, professionsLoading]);
 
   useEffect(() => validate(), [data]);
 
@@ -117,59 +117,59 @@ const UserEditPage = ({ match }) => {
               type="button"
               // disabled={!isValid}
               className="btn btn-primary w-100 mx-auto m-4"
-              onClick={handleGoBack}
+              onClick={ handleGoBack }
             >
               <i className="bi bi-caret-left"></i>
               Назад
             </button>
           </div>
           <div className="col-md-6 offset-md-1 shadow p-4">
-            <h1>{user.name} (Рfffgggfffедактирование)</h1>
-            <form onSubmit={handleSubmit}>
+            <h1>{ user.name } (Рfffgggfffедактирование)</h1>
+            <form onSubmit={ handleSubmit }>
               <TextField
                 label="Имя"
                 name="name"
-                onChange={handleChange}
-                value={data.name}
-                error={errors.name}
+                onChange={ handleChange }
+                value={ data.name }
+                error={ errors.name }
               />
               <TextField
                 label="Электронная почта"
                 placeholder="Это обязательное для заполнения поле"
                 name="email"
-                onChange={handleChange}
-                value={data.email}
-                error={errors.email}
+                onChange={ handleChange }
+                value={ data.email }
+                error={ errors.email }
               />
               <SelectField
                 label="Выбери свою профессию"
                 defaultOption="не выбранно ..."
                 name="profession"
-                value={data.profession}
-                options={professions}
-                onChange={handleChange}
-                error={errors.profession}
+                value={ data.profession }
+                options={ professions }
+                onChange={ handleChange }
+                error={ errors.profession }
               />
               <RadioField
                 label="Пол"
-                options={[
+                options={ [
                   { name: "Мужской", value: "male" },
                   { name: "Женский", value: "female" },
                   { name: "Другой", value: "other" }
-                ]}
+                ] }
                 name="sex"
-                onChange={handleChange}
-                value={data.sex}
+                onChange={ handleChange }
+                value={ data.sex }
               />
               <MultiSelectField
-                onChange={handleChange}
+                onChange={ handleChange }
                 options={ qualitiesList }
-                value={data.qualities}
+                value={ data.qualities }
                 name="qualities"
                 label="Качества"
               />
               <button
-                disabled={!isValid}
+                disabled={ !isValid }
                 className="btn btn-primary w-100 mx-auto"
               >
                 Обновить

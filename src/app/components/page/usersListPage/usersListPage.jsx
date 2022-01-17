@@ -7,14 +7,16 @@ import UserTable from "../../ui/userTable";
 import _ from "lodash";
 import TextField from "../../common/form/textField";
 import { useUser } from "../../../hooks/useUsers";
-import { useProfession } from "../../../hooks/useProfession";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professons";
 
 const UsersListPage = () => {
   const { users } = useUser();
   const { currentUser } = useAuth();
   const [curentPage, setCurentPage] = useState(1);
-  const { isLoading: professionsLoading, professions } = useProfession();
+  const professions = useSelector(getProfessions());
+  const professionsLoading = useSelector(getProfessionsLoadingStatus());
   const [selectedProf, setSelectedProf] = useState();
   const [search, setSaerch] = useState("");
   const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
@@ -81,46 +83,46 @@ const UsersListPage = () => {
       setSelectedProf();
     };
 
-    // console.log("context", users);
+    console.log("prof", professions, professionsLoading);
 
     return (
       <div className="d-flex">
         { professions && !professionsLoading && (
           <div className="d-flex flex-column flex-shrink-0 p-3">
             <GroupList
-              selectedItem={selectedProf}
-              items={professions}
-              onItemSelect={hendelProfessionSelect}
+              selectedItem={ selectedProf }
+              items={ professions }
+              onItemSelect={ hendelProfessionSelect }
             />
-            <button className="btn btn-secondary pt-2" onClick={clearSelected}>
+            <button className="btn btn-secondary pt-2" onClick={ clearSelected }>
               Сбросить фильтр
             </button>
           </div>
-        )}
+        ) }
         <div className="d-flex flex-column">
-          <HeaderSumUsers sum={countUsers} />
+          <HeaderSumUsers sum={ countUsers } />
           <TextField
             name="search"
-            value={!selectedProf ? search : ""}
+            value={ !selectedProf ? search : "" }
             placeholder="Поиск..."
-            onChange={handleChange}
-            onFocus={clearSelected}
+            onChange={ handleChange }
+            onFocus={ clearSelected }
           />
-          {countUsers !== 0 && (
+          { countUsers !== 0 && (
             <UserTable
-              users={usersCrop}
-              renderFavorit={renderFavorit}
-              onSort={hendleSort}
-              selectedSort={sortBy}
+              users={ usersCrop }
+              renderFavorit={ renderFavorit }
+              onSort={ hendleSort }
+              selectedSort={ sortBy }
               handleFavorit={ handleFavorit }
             />
-          )}
+          ) }
           <div className="d-flex justify-content-center">
             <Pagination
-              itemsCount={countUsers}
-              pageSize={pageSize}
-              curentPage={curentPage}
-              onPageChange={hendelPageChange}
+              itemsCount={ countUsers }
+              pageSize={ pageSize }
+              curentPage={ curentPage }
+              onPageChange={ hendelPageChange }
             />
           </div>
         </div>

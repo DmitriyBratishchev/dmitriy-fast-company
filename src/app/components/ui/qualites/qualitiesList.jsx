@@ -1,18 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { useQualities } from "../../../hooks/useQuality";
+import { useSelector, useDispatch } from "react-redux";
+import { getQualities, getQualitiesLoadingStatus, loadQualitiesList } from "../../../store/qualities";
 
 const QualitiesList = ({ qualitiesId }) => {
-  const { isLoading, getQuality } = useQualities();
-  if (!isLoading) {
-    // console.log("qualitiesId", qualitiesId);
-    const qualities = getQuality(qualitiesId);
+  const dispatch = useDispatch();
+  const qualities = useSelector(getQualities());
+  const isLoadingQualities = useSelector(getQualitiesLoadingStatus());
+  useEffect(() => {
+    dispatch(loadQualitiesList());
+  }, []);
+
+  if (!isLoadingQualities) {
+    const qualitiesList = qualities.filter(q => qualitiesId.indexOf(q._id) !== -1);
     return (
       <>
-        {qualities.map((qualite) => {
+        { qualitiesList.map((qualite) => {
           return (
-            <span key={qualite._id} className={`badge bg-${qualite.color} m-1`}>
-              {qualite.name}
+            <span key={ qualite._id } className={ `badge bg-${qualite.color} m-1` }>
+              { qualite.name }
             </span>
           );
         })}
