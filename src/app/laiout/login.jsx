@@ -15,14 +15,14 @@ const Login = () => {
     <div className="container mt-5">
       <div className="row">
         <div className="col-md-6 offset-md-3 shadow p-4">
-          {formType === "register" ? (
+          { formType === "register" ? (
             <>
               <h3 className="mb-4">Register</h3>
               <RegisterForm />
               <p>
                 Already have account?
-                <a role="button" onClick={toggleFormType}>
-                  {" "}
+                <a role="button" onClick={ toggleFormType }>
+                  { " " }
                   Sign In
                 </a>
               </p>
@@ -33,13 +33,13 @@ const Login = () => {
               <LoginForm />
               <p>
                 Dont have account?
-                <a role="button" onClick={toggleFormType}>
-                  {" "}
+                <a role="button" onClick={ toggleFormType }>
+                  { " " }
                   Sign Out
                 </a>
               </p>
             </>
-          )}
+          ) }
         </div>
       </div>
     </div>

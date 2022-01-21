@@ -11,22 +11,23 @@ import { getProfessions, getProfessionsLoadingStatus } from "../../../store/prof
 import { getCurrentUserId, getUsers } from "../../../store/users";
 
 const UsersListPage = () => {
-  // const { users } = useUser();
   const users = useSelector(getUsers());
   const currentUserId = useSelector(getCurrentUserId());
-
-  const [curentPage, setCurentPage] = useState(1);
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
+
+  const [curentPage, setCurentPage] = useState(1);
   const [selectedProf, setSelectedProf] = useState();
   const [search, setSaerch] = useState("");
   const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
   const pageSize = 4;
 
+  // в данный момент не используется, но возможно добавить функционал
   const handleFavorit = (userId) => {
     const userFavoritArray = users.map((el) => el._id === userId ? { ...el, favorit: !el.favorit } : el);
     console.log(userFavoritArray);
   };
+  // ---------------------------------------------------------------
 
   const handleChange = ({ value }) => {
     setSaerch(value);
@@ -61,8 +62,6 @@ const UsersListPage = () => {
 
   if (users) {
     function filterUsers(data) {
-      // console.log("selectedProf", selectedProf);
-      // console.log("selectedProf data", data);
       const filteredUsers = selectedProf
         ? data.filter(
           (user) =>
@@ -83,8 +82,6 @@ const UsersListPage = () => {
     const clearSelected = () => {
       setSelectedProf();
     };
-
-    console.log("prof", professions, professionsLoading);
 
     return (
       <div className="d-flex">

@@ -16,7 +16,6 @@ const UserCard = ({ user }) => {
     history.push(`/users/${user._id}/edit`);
   };
 
-  // console.log("UsereCard user", user);
   return (
     <>
       <div className="card mb-3">
