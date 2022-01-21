@@ -5,11 +5,12 @@ import { renderEnding } from "../../../particales/renderPhrase";
 import { useHistory } from "react-router-dom";
 import Profession from "../../ui/profession";
 import Avatar from "../../ui/avatar";
-import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getCurrentUserId } from "../../../store/users";
 
 const UserCard = ({ user }) => {
   const history = useHistory();
-  const { currentUser } = useAuth();
+  const currentUserId = useSelector(getCurrentUserId());
 
   const handelToUserEdit = () => {
     history.push(`/users/${user._id}/edit`);
@@ -20,7 +21,7 @@ const UserCard = ({ user }) => {
     <>
       <div className="card mb-3">
         <div className="card-body">
-          { user._id === currentUser._id && <button className="position-absolute top-0 end-0 btn btn-light btn-sm" onClick={ handelToUserEdit }>
+          { user._id === currentUserId && <button className="position-absolute top-0 end-0 btn btn-light btn-sm" onClick={ handelToUserEdit }>
             <i className="bi bi-gear"></i>
           </button> }
           <div className="d-flex flex-column align-items-center text-center position-relative">

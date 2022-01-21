@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
 import CheckBoxField from "../common/form/checkBoxField";
-import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteAuthError, getAuthError, login } from "../../store/users";
 
 const LoginForm = () => {
   const history = useHistory();
-  const { logIn } = useAuth();
+  const dispatch = useDispatch();
+  const loginError = useSelector(getAuthError());
   const [data, setData] = useState({ email: "", password: "", stayOn: true });
   const [errors, setErrors] = useState({});
   const isValid = Object.keys(errors).length === 0;
@@ -53,41 +55,39 @@ const LoginForm = () => {
       ...prev,
       [target.name]: target.value
     }));
+    dispatch(deleteAuthError());
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    try {
-      await logIn(data);
-      history.push(history.location.state ? history.location.state.from.pathname : "/");
-    } catch (error) {
-      setErrors(error);
-    }
+    const redirect = history.location.state ? history.location.state.from.pathname : "/";
+    dispatch(login({ payload: data, redirect }));
   };
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={ handleSubmit }>
       <TextField
         label="Электронная почта"
         placeholder="Это обязательное для заполнения поле"
         name="email"
-        onChange={handleChange}
-        value={data.email}
-        error={errors.email}
+        onChange={ handleChange }
+        value={ data.email }
+        error={ errors.email }
       />
       <TextField
         label="password"
         name="password"
         type="password"
-        onChange={handleChange}
-        value={data.password}
-        error={errors.password}
+        onChange={ handleChange }
+        value={ data.password }
+        error={ errors.password }
       />
-      <CheckBoxField value={data.stayOn} onChange={handleChange} name="stayOn">
+      <CheckBoxField value={ data.stayOn } onChange={ handleChange } name="stayOn">
         Оставаться в системе
       </CheckBoxField>
-      <button disabled={!isValid} className="btn btn-primary w-100 mx-auto">
+      { loginError && <p className="text-danger">{ loginError }</p> }
+      <button disabled={ !isValid || loginError } className="btn btn-primary w-100 mx-auto">
         Отправить
       </button>
     </form>

@@ -68,6 +68,7 @@ const AuthProvider = ({ children }) => {
         ...rest
       });
     } catch (error) {
+      console.log("signUp error", error);
       errorCatcher(error);
       const { code, message } = error.response.data.error;
       if (code === 400) {
@@ -113,9 +114,7 @@ const AuthProvider = ({ children }) => {
 
   async function createUser(data) {
     try {
-      // console.log("createUser data", data);
       const { content } = await userService.create(data);
-      // console.log("createUser", content);
       setCurrentUser(content);
     } catch (error) {
       errorCatcher(error);
@@ -133,6 +132,7 @@ const AuthProvider = ({ children }) => {
 
   function errorCatcher(error) {
     const { message } = error.response.data;
+    console.log("message", message);
     setError(message);
     setLoading(false);
   }
