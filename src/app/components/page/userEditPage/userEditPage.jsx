@@ -7,17 +7,18 @@ import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import { useHistory } from "react-router";
-// import { toast } from "react-toastify";
-import { useAuth } from "../../../hooks/useAuth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getQualities, getQualitiesLoadingStatus } from "../../../store/qualities";
 import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professons";
+import { getCurrentUser, updateUserData } from "../../../store/users";
 
 const UserEditPage = ({ match }) => {
   const id = match.params.id;
   console.log(id);
   const { goBack } = useHistory();
-  const { currentUser: user, updateUserData } = useAuth();
+  const dispatch = useDispatch();
+
+  const currentUser = useSelector(getCurrentUser());
 
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
@@ -31,17 +32,17 @@ const UserEditPage = ({ match }) => {
   const isValid = Object.keys(errors).length === 0;
 
   useEffect(() => {
-    if (user && !isLoadingQualities && !professionsLoading) {
-      // if (id !== user._id) {
+    if (currentUser && !isLoadingQualities && !professionsLoading) {
+      // if (id !== currentUser._id) {
       //   toast.info("Редактировать можно только свой профиль!");
-      //   push("/users/" + user._id + "/edit");
+      //   push("/users/" + currentUser._id + "/edit");
       // }
       setData({
-        ...user,
-        qualities: qualitiesList.filter(q => user.qualities.indexOf(q.value) !== -1)
+        ...currentUser,
+        qualities: qualitiesList.filter(q => currentUser.qualities.indexOf(q.value) !== -1)
       });
     }
-  }, [user, isLoadingQualities, professionsLoading]);
+  }, [currentUser, isLoadingQualities, professionsLoading]);
 
   useEffect(() => validate(), [data]);
 
@@ -91,24 +92,25 @@ const UserEditPage = ({ match }) => {
     goBack();
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
     const newData = { ...data, qualities: data.qualities.map(q => q.value) };
+    dispatch(updateUserData(newData));
     // console.log("newData", newData);
     // try {
     // const data =
-    await updateUserData(newData);
+    // await updateUserData(newData);
     // console.log("newData await", data);
     goBack();
     // } catch (error) {
     // setErrors(error);
     // }
   };
-  // console.log("user", user);
+  // console.log("currentUser", currentUser);
   // console.log("data", data);
-  if (user && data && qualities) {
+  if (currentUser && data && qualities) {
     return (
       <div className="container mt-5">
         <div className="row">
@@ -124,7 +126,7 @@ const UserEditPage = ({ match }) => {
             </button>
           </div>
           <div className="col-md-6 offset-md-1 shadow p-4">
-            <h1>{ user.name } (Рfffgggfffедактирование)</h1>
+            <h1>{ currentUser.name } (Редактирование)</h1>
             <form onSubmit={ handleSubmit }>
               <TextField
                 label="Имя"

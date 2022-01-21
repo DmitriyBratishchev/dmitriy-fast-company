@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { toNumber } from "lodash";
 import Comment from "./comment";
+import { toNumber } from "lodash";
 
-const CommentsList = ({ comments = [], onDelete }) => {
-  const commentsBySort = comments.sort((a, b) => (toNumber(a.created_at) < toNumber(b.created_at)) ? 1 : -1);
-  if (commentsBySort?.length) {
+const CommentsList = ({ comments, onDelete }) => {
+  const commentsBySort = [...comments].sort((a, b) => (toNumber(a.created_at) < toNumber(b.created_at)) ? 1 : -1);
+  if (commentsBySort.length) {
     return (
       <div className="card mb-3">
         <div className="card-body ">
@@ -13,7 +13,7 @@ const CommentsList = ({ comments = [], onDelete }) => {
           <hr />
           { commentsBySort.map((comment) => {
             return <Comment key={ comment._id } comment={ comment } onDelete={ onDelete } />;
-          })}
+          }) }
         </div>
       </div>
     );

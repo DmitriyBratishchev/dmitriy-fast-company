@@ -44,10 +44,7 @@ export const loadProfessions = () => async (dispatch, getState) => {
 };
 
 // Селекторы
-export const getProfessions = () => (state) => {
-  console.log("state getProf", state, state.professions.entities);
-  return state.professions.entities;
-};
+export const getProfessions = () => (state) => state.professions.entities;
 export const getProfessionsLoadingStatus = () => (state) => state.professions.isloading;
 
 export default professionsReducer;

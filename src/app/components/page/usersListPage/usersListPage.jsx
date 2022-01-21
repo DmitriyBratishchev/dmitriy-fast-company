@@ -6,14 +6,15 @@ import GroupList from "../../common/groupList";
 import UserTable from "../../ui/userTable";
 import _ from "lodash";
 import TextField from "../../common/form/textField";
-import { useUser } from "../../../hooks/useUsers";
-import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professons";
+import { getCurrentUserId, getUsers } from "../../../store/users";
 
 const UsersListPage = () => {
-  const { users } = useUser();
-  const { currentUser } = useAuth();
+  // const { users } = useUser();
+  const users = useSelector(getUsers());
+  const currentUserId = useSelector(getCurrentUserId());
+
   const [curentPage, setCurentPage] = useState(1);
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
@@ -72,7 +73,7 @@ const UsersListPage = () => {
             user.name.toLowerCase().includes(search.toLowerCase())
           )
           : data;
-      return filteredUsers.filter(u => u._id !== currentUser._id);
+      return filteredUsers.filter(u => u._id !== currentUserId);
     };
     const filteredUsers = filterUsers(users);
 

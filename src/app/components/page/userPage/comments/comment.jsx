@@ -1,14 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useUser } from "../../../../hooks/useUsers";
 import Avatar from "../../../ui/avatar";
 import { timeDifference } from "../../../../particales/timeDifference";
-import { useAuth } from "../../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getCurrentUserId, getUserById } from "../../../../store/users";
 
 const Comment = ({ comment, onDelete }) => {
-  const { getUserById } = useUser();
-  const { currentUser } = useAuth();
-  const user = getUserById(comment.userId);
+  const currentUserId = useSelector(getCurrentUserId())
+  const user = useSelector(getUserById(comment.userId));
 
   return (
     <div className="bg-light card-body mb-3">
@@ -25,7 +24,7 @@ const Comment = ({ comment, onDelete }) => {
                       { " - " }{ timeDifference(comment.created_at) }
                     </span>
                   </p>
-                  { currentUser._id === comment.userId && (
+                  { currentUserId === comment.userId && (
                     <button onClick={ () => onDelete(comment._id) } className="btn btn-sm text-primary d-flex align-items-center">
                       <i className="bi bi-x-lg"></i>
                     </button>
