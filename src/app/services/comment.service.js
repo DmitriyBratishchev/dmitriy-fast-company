@@ -5,11 +5,9 @@ const commentEndpoint = "comment/";
 const commentService = {
   createComment: async (comment) => {
     const { data } = await httpService.put(commentEndpoint + comment._id, comment);
-    // console.log("commentService", data);
     return data;
   },
   getComments: async (pageId) => {
-    // docs Firebase: https://firebase.google.com/docs/database/rest/retrieve-data?hl=en
     const { data } = await httpService.get(commentEndpoint, {
       params: {
         orderBy: '"pageId"',

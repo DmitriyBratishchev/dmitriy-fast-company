@@ -8,9 +8,6 @@ const http = axios.create({
   baseURL: configFile.fireBase ? configFile.apiEndpointFireBase : configFile.apiEndpoint
 });
 
-//  адрес по-умолчанию
-// http.defaults.baseURL = configFile.fireBase ? configFile.apiEndpointFireBase : configFile.apiEndpoint;
-
 http.interceptors.request.use(
   async function (config) {
     if (configFile.fireBase) {
@@ -45,18 +42,14 @@ function transformData(data) {
 }
 
 http.interceptors.response.use((res) => {
-  // toast.info("Данные успешно изменены!")
   if (configFile.fireBase) {
     res.data = { content: transformData(res.data) };
   }
   return res;
 }, function (error) {
-  // console.log("interceptor");
   const expectedErrors = error.response && error.response.status >= 400 && error.response.status < 500;
   if (!expectedErrors) {
-    // console.log(error);
     toast.error(`Произошла ошибка.\nКоманда работает над исправлением.\nПопробуйте позже.`);
-    // toast("Unexpected error");
   }
   return Promise.reject(error);
 });

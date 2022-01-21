@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-// import API from "../../../api";
 import { validator } from "../../../utils/validator";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
@@ -12,14 +10,11 @@ import { getQualities, getQualitiesLoadingStatus } from "../../../store/qualitie
 import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professons";
 import { getCurrentUser, updateUserData } from "../../../store/users";
 
-const UserEditPage = ({ match }) => {
-  const id = match.params.id;
-  console.log(id);
+const UserEditPage = () => {
   const { goBack } = useHistory();
   const dispatch = useDispatch();
 
   const currentUser = useSelector(getCurrentUser());
-
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
   const qualities = useSelector(getQualities());
@@ -33,10 +28,6 @@ const UserEditPage = ({ match }) => {
 
   useEffect(() => {
     if (currentUser && !isLoadingQualities && !professionsLoading) {
-      // if (id !== currentUser._id) {
-      //   toast.info("Редактировать можно только свой профиль!");
-      //   push("/users/" + currentUser._id + "/edit");
-      // }
       setData({
         ...currentUser,
         qualities: qualitiesList.filter(q => currentUser.qualities.indexOf(q.value) !== -1)
@@ -98,18 +89,8 @@ const UserEditPage = ({ match }) => {
     if (!isValid) return;
     const newData = { ...data, qualities: data.qualities.map(q => q.value) };
     dispatch(updateUserData(newData));
-    // console.log("newData", newData);
-    // try {
-    // const data =
-    // await updateUserData(newData);
-    // console.log("newData await", data);
-    goBack();
-    // } catch (error) {
-    // setErrors(error);
-    // }
   };
-  // console.log("currentUser", currentUser);
-  // console.log("data", data);
+
   if (currentUser && data && qualities) {
     return (
       <div className="container mt-5">
@@ -117,7 +98,6 @@ const UserEditPage = ({ match }) => {
           <div className="col-md-2">
             <button
               type="button"
-              // disabled={!isValid}
               className="btn btn-primary w-100 mx-auto m-4"
               onClick={ handleGoBack }
             >
@@ -184,10 +164,6 @@ const UserEditPage = ({ match }) => {
   } else {
     return <h3>Loading ...</h3>;
   }
-};
-
-UserEditPage.propTypes = {
-  match: PropTypes.object
 };
 
 export default UserEditPage;

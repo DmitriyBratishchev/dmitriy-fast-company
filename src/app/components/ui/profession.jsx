@@ -7,7 +7,7 @@ const Profession = ({ id }) => {
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
 
-  if (!professionsLoading) {
+  if (!professionsLoading && professions.length) {
     const profession = professions.find(p => p._id === id);
     return <p>{ profession.name }</p>;
   } else {

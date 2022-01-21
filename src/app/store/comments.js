@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
-// import { isOutDated } from "../particales/isOutDated";
 import commentService from "../services/comment.service";
 
 const commentsSlice = createSlice({
@@ -49,14 +48,12 @@ export const loadComments = (userId) => async (dispatch, extra, signal) => {
 
 export const createComment = (data) => async (dispatch, getState) => {
   const { users } = getState();
-
   const comment = {
     ...data,
     _id: nanoid(),
     userId: users.auth.userId,
     created_at: Date.now()
   };
-  // console.log("comment", comment);
   dispatch(commentsRequested());
   try {
     const { content } = await commentService.createComment(comment);
@@ -69,7 +66,6 @@ export const createComment = (data) => async (dispatch, getState) => {
 export const removeComment = (id) => async (dispatch) => {
   try {
     const { content } = await commentService.removeComment(id);
-    // console.log("removeCommets content", content);
     if (content === null) {
       dispatch(deleteComment(id));
     }

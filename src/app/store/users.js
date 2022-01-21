@@ -122,13 +122,6 @@ export const signUp = ({ email, password, ...rest }) => async (dispatch) => {
     }));
   } catch (error) {
     dispatch(authRequestFaild(error.message));
-    // const { code, message } = error.response.data.error;
-    //   if (code === 400) {
-    //     if (message === "EMAIL_EXISTS") {
-    //       const errorObject = { email: "Пользователь с таким email уже существует." };
-    //       throw errorObject;
-    //     }
-    //   }
   }
 };
 
@@ -150,6 +143,7 @@ export const updateUserData = (data) => async (dispatch) => {
   try {
     const { content } = await userService.update(data);
     dispatch(updateUserDataReceved(content));
+    history.push(`/users/${content._id}`);
   } catch (error) {
     dispatch(updateUserDataFaild(error.message));
   }
